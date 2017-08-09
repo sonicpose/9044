@@ -129,8 +129,6 @@ def describe(file, keyword):
         start = start + 1
 
     return definition
-
-lineMod('test', 'Hi', 3)
 #	os.system("echo {} | espeak".format(x))
 
 #Calling area
