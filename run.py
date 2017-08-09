@@ -20,6 +20,7 @@ def download(videoURL):
 
 def playlist(playlistURL):
 	videoIDs = scrape(playlistURL)
+	print(videoIDs)
 	playlistID = playlistURL.split('list=')[1]
 	unwatchedVideoIDs = watchedCheck(playlistID, videoIDs)
 
@@ -28,13 +29,14 @@ def playlist(playlistURL):
 		videoURL = 'http://www.youtube.com/watch?v='+unwatchedVideoIDs[i]
 		print(videoURL)
 		if download(videoURL):
-			core.log(playlistURL, unwatchedVideoIDs[i])
+			core.log(playlistID, unwatchedVideoIDs[i])
+		i = i + 1
 
 	return True
 
 def scrape(playlistURL):
 	query_string = urllib.parse.urlencode({"search_query" : playlistURL})
-	html_content = urllib.request.urlopen("http://www.youtube.com/results?" + query_string)
+	html_content = urllib.request.urlopen(playlistURL)
 	search_results = re.findall(r'href=\"\/watch\?v=(.{11})', html_content.read().decode())
 
 	return search_results
