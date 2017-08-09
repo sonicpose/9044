@@ -6,8 +6,7 @@ import re
 import sys
 
 def main():
-	videoIDs = scrape('https://www.youtube.com/playlist?list=PLgPKmF5rEZ5pMxmluLP91GgrNt6WPLNnj')
-	watchedCheck(playlistURL, videoIDs)
+	playlist('https://www.youtube.com/playlist?list=PLDSOKOxxjY4TwbUiMFn0Ghn5ulOThjDZb')
 
 	return
 
@@ -19,6 +18,39 @@ def download(videoURL):
 
 	return True
 
+def playlist(playlistURL):
+	videoIDs = scrape(playlistURL)
+	playlistID = playlistURL.split('list=')[1]
+	unwatchedVideoIDs = watchedCheck(playlistID, videoIDs)
+
+	i = 0
+	while i < len(unwatchedVideoIDs):
+		videoURL = 'http://www.youtube.com/watch?v='+unwatchedVideoIDs[i]
+		print(videoURL)
+		if download(videoURL):
+			core.log(playlistURL, unwatchedVideoIDs[i])
+
+	return True
+
+def scrape(playlistURL):
+	query_string = urllib.parse.urlencode({"search_query" : playlistURL})
+	html_content = urllib.request.urlopen("http://www.youtube.com/results?" + query_string)
+	search_results = re.findall(r'href=\"\/watch\?v=(.{11})', html_content.read().decode())
+
+	return search_results
+
+def watchedCheck(playlistID, videoIDs):
+	unwatchedVideoIDs = []
+	watchedList = core.read(playlistID)
+	watchedIDs = core.split(watchedList)
+	i = 0
+	while i < len(videoIDs):
+		if videoIDs[i] not in watchedIDs:
+			unwatchedVideoIDs.append(videoIDs[i])
+		i = i + 1
+
+	return unwatchedVideoIDs
+
 def log(text):
 	w = open('log', 'a')
 	
@@ -27,28 +59,5 @@ def log(text):
 	w.close
 
 	return True
-
-def scrape(playlistURL):
-	query_string = urllib.parse.urlencode({"search_query" : PlaylistURL})
-	html_content = urllib.request.urlopen("http://www.youtube.com/results?" + query_string)
-	search_results = re.findall(r'href=\"\/watch\?v=(.{11})', html_content.read().decode())
-	print(search_results)
-
-	return search_results
-
-def watchedCheck(playlistURL, videoIDs):
-	unwatchedVideoIDs = []
-	watchedList = core.read(playlistURL)
-	watchedIDs = core.split(watchedList)
-	i = 0
-	ii = 0
-	while i < len(videoIDs):
-		while ii < len(watchedIDs):
-			if videoIDs[i] = watchedIDs[ii]:
-				unwatchedVideoIDs.append(videoIDs[i])
-			ii = ii + 1
-		i = i + 1
-
-	return unwatchedVideoIDs
 
 main()
