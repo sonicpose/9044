@@ -1,0 +1,37 @@
+html {
+    background: #e6e9e9;
+    background-image: linear-gradient(270deg, rgb(230, 233, 233) 0%, rgb(216, 221, 221) 100%);
+}
+
+body {
+    background: #fff;
+    color: black;
+    font-family: "Comic Sans MS";
+    font-size: 18px;
+
+    margin: 0 auto;
+    max-width: 800px;
+    padding: 2em 2em 4em;
+    text-align: center;
+}
+
+h1 {
+    margin-top: auto;
+    color: black;
+    font-size: 48px;
+}
+
+img {
+    background: transparent;
+    display: block;
+    margin: 1.3em auto;
+    height: 70%;
+    width: 70%;
+}
+
+div {
+    height: 70%;
+    width: 70%;
+    margin: auto;
+}
+
