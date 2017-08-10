@@ -6,14 +6,17 @@ import re
 import sys
 
 def main():
+	downloadQueue = handleInput()
+	queueDownloads(downloadQueue)
 	playlistCheck()
+	time.sleep(5)
 
 	return
 
 def handleInput():
 	downloadQueue = []
 
-	inputText = core.read('data.txt')
+	inputText = core.read('lampp/htdocs/data.txt')
 	print(inputText)
 	#core.write('data.txt', '')
 	inputArray = core.split(inputText)
