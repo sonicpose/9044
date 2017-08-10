@@ -6,8 +6,7 @@ import re
 import sys
 
 def main():
-	downloadQueue = handleInput()
-	queueDownloads(downloadQueue)
+	playlistCheck()
 
 	return
 
@@ -93,5 +92,16 @@ def queueDownloads(downloadQueue):
 		i = i + 1
 
 	return True
+
+def playlistCheck():
+	playlists = core.split(core.read('playlists'))
+
+	i = 0
+	while i < len(playlists):
+		core.write(playlists[i].split('list=')[1], '')
+		playlist(playlists[i])
+		i = i + 1
+
+	return
 
 main()
