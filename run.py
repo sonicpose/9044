@@ -14,17 +14,25 @@ def main():
 
 	return
 
-def handleInput():	#handleInput receives and sorts the information from the front end
+#handleInput receives and sorts the information from the front end
+def handleInput():
 	downloadQueue = []
 
-	inputText = core.read('/opt/lampp/htdocs/data.txt')#data.txt is the file where the front end leaves the data for us
+	#data.txt is the file where the front end leaves the data for us
+	inputText = core.read('/opt/lampp/htdocs/data.txt')
 	print(inputText)
 	core.write('/opt/lampp/htdocs/data.txt', '')
-	inputArray = core.split(inputText)#inputText is split into an array so that we can interact with each line individually (Different URLs are put on different lines by the frontend).
+	#inputText is split into an array so that we can interact with each line
+	#individually (Different URLs are put on different lines by the frontend).
+	inputArray = core.split(inputText)
 	print(inputArray)
 
 	i = 0#i is just an integer used for counting the times round a loop
-	while i < len(inputArray):#This loop allows us to perform the same function on each line of the array. In this case it goes through each line and sorts it into a video url, a playlist url, or random text. And then the appropriate response is carried out
+	#This loop allows us to perform the same function
+	#on each line of the array. In this case it goes through each line and sorts
+	#it into a video url, a playlist url, or random text. And then the
+	#appropriate response is carried out
+	while i < len(inputArray):
 		inputData = inputArray[i]
 		print(inputData)
 
@@ -46,13 +54,20 @@ def download(videoURL):#Download takes a video url and downloads the video
 	return True
 
 def playlist(playlistURL):#Does all the playlist stuff
-	videoIDs = scrape(playlistURL)#Scrapes the URL page and gets the video ids/urls
+
+	#Scrapes the URL page and gets the video ids/urls
+	videoIDs = scrape(playlistURL)
 	print(videoIDs)
-	playlistID = playlistURL.split('list=')[1]#converts playlist url into id for database
-	unwatchedVideoIDs = watchedCheck(playlistID, videoIDs)#Checks what videos in playlist have already been downloaded
+
+	#converts playlist url into id for database
+	playlistID = playlistURL.split('list=')[1]
+
+	#Checks what videos in playlist have already been downloaded
+	unwatchedVideoIDs = watchedCheck(playlistID, videoIDs)
 
 	i = 0
-	while i < len(unwatchedVideoIDs):#Each iteration of the loop downloads a unwatched video in the playlist
+	#Each iteration of the loop downloads a unwatched video in the playlist
+	while i < len(unwatchedVideoIDs):
 		videoURL = 'http://www.youtube.com/watch?v='+unwatchedVideoIDs[i]
 		print(videoURL)
 		if download(videoURL):
@@ -68,7 +83,8 @@ def scrape(playlistURL):
 
 	return search_results
 
-def watchedCheck(playlistID, videoIDs):#Checks what videos in the playlist have already been downloaded (watched).
+#Checks what videos in the playlist have already been downloaded (watched).
+def watchedCheck(playlistID, videoIDs):
 	unwatchedVideoIDs = []
 	watchedList = core.read(playlistID)
 	watchedIDs = core.split(watchedList)
@@ -89,7 +105,8 @@ def log(text):
 
 	return True
 
-def queueDownloads(downloadQueue):#Runs a loop for every video not in a playlist that needs to be downloaded
+#Runs a loop for every video not in a playlist that needs to be downloaded
+def queueDownloads(downloadQueue):
 	i = 0
 	while i < len(downloadQueue):
 		download(downloadQueue[i])
@@ -97,7 +114,9 @@ def queueDownloads(downloadQueue):#Runs a loop for every video not in a playlist
 
 	return True
 
-def playlistCheck():#Checks what playlists are being watched/should have new videos downloaded from then begins the playlist download process
+#Checks what playlists are being watched/should have new videos downloaded from
+#then begins the playlist download process
+def playlistCheck():
 	playlists = core.split(core.read('playlists'))
 
 	i = 0
