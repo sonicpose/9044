@@ -6,12 +6,36 @@ import re
 import sys
 
 def main():
-	playlist('https://www.youtube.com/playlist?list=PLDSOKOxxjY4TwbUiMFn0Ghn5ulOThjDZb')
+	downloadQueue = handleInput()
+	queueDownloads(downloadQueue)
 
 	return
 
+def handleInput():
+	downloadQueue = []
+
+	inputText = core.read('data.txt')
+	print(inputText)
+	#core.write('data.txt', '')
+	inputArray = core.split(inputText)
+	print(inputArray)
+
+	i = 0
+	while i < len(inputArray):
+		inputData = inputArray[i]
+		print(inputData)
+
+		if 'list=' in inputData:
+			core.log('playlists', inputData)
+		if 'v=' in inputData:
+			downloadQueue.append(inputData)
+
+		i = i + 1
+
+	return downloadQueue
+
 def download(videoURL):
-	cmd = 'youtube-dl ' + videoURL
+	cmd = 'youtube-dl -i ' + videoURL
 	txt = "cmd = " + cmd
 	log(txt)
 	os.system(cmd)
@@ -59,6 +83,14 @@ def log(text):
 	w.write(text + "\n")
 
 	w.close
+
+	return True
+
+def queueDownloads(downloadQueue):
+	i = 0
+	while i < len(downloadQueue):
+		download(downloadQueue[i])
+		i = i + 1
 
 	return True
 
