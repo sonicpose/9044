@@ -27,7 +27,7 @@ def handleInput():
 	inputArray = core.split(inputText)
 	print(inputArray)
 
-	i = 0#i is just an integer used for counting the times round a loop
+	i = 0
 	#This loop allows us to perform the same function
 	#on each line of the array. In this case it goes through each line and sorts
 	#it into a video url, a playlist url, or random text. And then the
@@ -45,6 +45,15 @@ def handleInput():
 
 	return downloadQueue
 
+#Runs a loop for every video not in a playlist that needs to be downloaded
+def queueDownloads(downloadQueue):
+	i = 0
+	while i < len(downloadQueue):
+		download(downloadQueue[i])
+		i = i + 1
+
+	return True
+
 def download(videoURL):#Download takes a video url and downloads the video
 	cmd = 'youtube-dl -i ' + videoURL
 	txt = "cd Downloads \n cmd = " + cmd
@@ -52,6 +61,19 @@ def download(videoURL):#Download takes a video url and downloads the video
 	os.system(cmd)
 
 	return True
+
+#Checks what playlists are being watched/should have new videos downloaded from
+#then begins the playlist download process
+def playlistCheck():
+	playlists = core.split(core.read('playlists'))
+
+	i = 0
+	while i < len(playlists):
+		core.write(playlists[i].split('list=')[1], '')
+		playlist(playlists[i])
+		i = i + 1
+
+	return
 
 def playlist(playlistURL):#Does all the playlist stuff
 
@@ -96,6 +118,8 @@ def watchedCheck(playlistID, videoIDs):
 
 	return unwatchedVideoIDs
 
+#Log was made for logging variables and marking points in the code for bugfixing
+#It is almost unused in the final version
 def log(text):
 	w = open('log', 'a')
 	
@@ -104,27 +128,5 @@ def log(text):
 	w.close
 
 	return True
-
-#Runs a loop for every video not in a playlist that needs to be downloaded
-def queueDownloads(downloadQueue):
-	i = 0
-	while i < len(downloadQueue):
-		download(downloadQueue[i])
-		i = i + 1
-
-	return True
-
-#Checks what playlists are being watched/should have new videos downloaded from
-#then begins the playlist download process
-def playlistCheck():
-	playlists = core.split(core.read('playlists'))
-
-	i = 0
-	while i < len(playlists):
-		core.write(playlists[i].split('list=')[1], '')
-		playlist(playlists[i])
-		i = i + 1
-
-	return
 
 main()
