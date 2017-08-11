@@ -55,8 +55,8 @@ def queueDownloads(downloadQueue):
 	return True
 
 def download(videoURL):#Download takes a video url and downloads the video
-	cmd = 'youtube-dl -i ' + videoURL
-	txt = "cd Downloads \n cmd = " + cmd
+	cmd = 'cd Downloads \n youtube-dl -i ' + videoURL
+	txt = "cmd = " + cmd
 	log(txt)
 	os.system(cmd)
 
@@ -69,8 +69,9 @@ def playlistCheck():
 
 	i = 0
 	while i < len(playlists):
-		core.write(playlists[i].split('list=')[1], '')
-		playlist(playlists[i])
+		if len(playlists[0]) > 2:
+			core.write(playlists[i].split('list=')[1], '')
+			playlist(playlists[i])
 		i = i + 1
 
 	return
